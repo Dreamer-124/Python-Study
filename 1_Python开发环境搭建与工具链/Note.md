@@ -19,3 +19,27 @@ conda activate deepseek
 export PATH = /path/to/python:$PATH
 ```
 
+# 任务二 Cursor的配置与快捷键
+## 1. 笔记
+- 完成安装[cursor](https://www.cursor.com/)，处理完毕配置文件，模型，提示词
+
+## 2. 快捷键
+- `CTRL/CMD + L` 打开对话框
+  - 选中代码块 `CTRL/CMD + L` 根据代码块对话
+- `CTRL/CMD + K` 打开生成窗口
+- `CTRL/CMD + I` 打开Composer，用于多文件修改
+  - 在同一窗口内完成
+
+## 3. 注记
+- @Files: 传递指定代码文件上下文
+- @Code: 传递指定代码块（函数和类）上下文
+- @Docs: 从官方文档获取上下文（需要先在配置文件添加文档）
+- @Web: 从搜索引擎结果获取上下文
+- @Folders: 传递文件目录信息上下文
+- @Chat: 传递对话窗口内容上下文（仅限代码生成窗口）
+- @Definitions: 传递变量和类型定义上下文（仅限代码生成窗口）
+- @Git: 传递Git仓库commit历史（仅限对话窗口）
+- @Codebase: 在代码仓里扫描文件传入（仅限对话窗口）
+
+
+
