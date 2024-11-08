@@ -41,5 +41,12 @@ export PATH = /path/to/python:$PATH
 - @Git: 传递Git仓库commit历史（仅限对话窗口）
 - @Codebase: 在代码仓里扫描文件传入（仅限对话窗口）
 
+# 任务三 为Cursor更换自定义模型并实现代码注释的生成
+## 1. OpenAI API文档与 key 的创建
+- [OpenAI API文档](https://platform.openai.com/docs/overview)
+- [API key 创建](https://platform.openai.com/api-keys)
+- 需要配置文档
 
+## 2. 国产大模型DeepSeek
+- [DeepSeek API文档](https://api-docs.deepseek.com/zh-cn/)
 
