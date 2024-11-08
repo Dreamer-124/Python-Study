@@ -2,7 +2,7 @@ from openai import OpenAI
 import gradio as gr  
 
 # 初始化OpenAI客户端
-client = OpenAI(api_key="sk-eff45a3737fd4a7c9872d5388de32ea0", base_url="https://api.deepseek.com/v1")
+client = OpenAI(api_key="sk-9306cd46f44a4a558e598b58929c007f", base_url="https://api.deepseek.com/v1")
 
 def predict(message, history):
     try:
