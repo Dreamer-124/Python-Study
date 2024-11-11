@@ -126,3 +126,30 @@ print(f"删除元素后的集合: {my_collection.items}")
 for item in my_collection:
     print(item)
 ```
+
+### 1.5 借助大模型学练基本数据类型和魔术方法
+- 使用 cursor、deepseek、github copilot、通义灵码等任意 Chat 生成结果
+- 通过对一个知识点的询问，消化结果并通过练习题来巩固的方法完成学习
+
+# 任务三 数据类型和数据结构间的自动转换
+## 1. 借助大模型实现从数据结构到数据类型的转换
+### 1.1 标准库与容器数据类型
+- [标准库：扩展的数据类型](https://docs.python.org/zh-cn/3/library/index.html)
+
+### 1.2 数据结构与数据类型之间的对应关系
+- 数组：`list`
+- 链表：自定义类
+- 栈：`list`
+- 队列：`collections.deque`
+- 哈希表：`dict`
+- 集合：`set`
+- 树：自定义类
+- 图：自定义类或 `dict` 和 `set` 的组合
+
+# 任务四 借助 LLM 读代码
+## 1. 借助开源项目了解数据类型的使用
+### 1.1 借助大语言模型的多轮对话了解列表和字典的用法
+- 
+
+### 1.2 LLM explain
+-  

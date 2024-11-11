@@ -8,7 +8,7 @@
   - openai
   - gradio
 - 运行成功截图
-  - ![运行成功截图](./img/2.2.png)
+  - ![运行成功截图](image.png)
 
 
 ---
