@@ -6,10 +6,10 @@ Y = [2, 3, 4, 5]
 Z = [0, 0, 0, 0]
 W = 0
 for i in range(len(X)):
-Z[i] = X[i] + Y[i]
+    Z[i] = X[i] + Y[i]
 
 for i in range(len(X)):
-W += X[i] * Y[i]
+    W += X[i] * Y[i]
 print(Z, W)
 ``` 
 
@@ -20,24 +20,24 @@ print(Z, W)
 
 # 实现两个向量的加法
 def vector_add(X, Y):
-result = []
-for x, y in zip(X, Y):
-    result.append(x + y)
-return result
+    result = []
+    for x, y in zip(X, Y):
+        result.append(x + y)
+    return result
 
 # 实现两个向量的乘法
 def vector_multiply(X, Y):
-result = 0
-for x, y in zip(X, Y):
-    result += x * y
-return result
+    result = 0
+    for x, y in zip(X, Y):
+        result += x * y
+    return result
 
 if __name__ == "__main__":
-# 定义两个向量
-X = [1, 2, 3, 4]
-Y = [2, 3, 4, 5]
+    # 定义两个向量
+    X = [1, 2, 3, 4]
+    Y = [2, 3, 4, 5]
 
-print(vector_add(X, Y), vector_multiply(X, Y))
+    print(vector_add(X, Y), vector_multiply(X, Y))
 ```
 
 ## 1.3
@@ -45,26 +45,26 @@ print(vector_add(X, Y), vector_multiply(X, Y))
 ```Python
 # 实现两个向量的加法
 def vector_add(X, Y):
-result = []
-for x, y in zip(X, Y):
-    result.append(x + y)
-return result
+    result = []
+    for x, y in zip(X, Y):
+        result.append(x + y)
+    return result
 
 # 实现两个向量的乘法
 def vector_multiply(X, Y):
-result = 0
-for x, y in zip(X, Y):
-    result += x * y
-return result
+    result = 0
+    for x, y in zip(X, Y):
+        result += x * y
+    return result
 
 if __name__ == "__main__":
-# 定义两个向量
-X = [1, 2, 3, 4]
-Y = [2, 3, 4, 5]
+    # 定义两个向量
+    X = [1, 2, 3, 4]
+    Y = [2, 3, 4, 5]
 
-# 输出加法和乘法的结果
-print("向量加法结果:", vector_add(X, Y))
-print("向量乘法结果:", vector_multiply(X, Y))
+    # 输出加法和乘法的结果
+    print("向量加法结果:", vector_add(X, Y))
+    print("向量乘法结果:", vector_multiply(X, Y))
 ```
 
 ## 1.4
@@ -87,8 +87,8 @@ def __mul__(self, other):
     return sum([x * y for x, y in zip(self.data, other.data)])
 
 if __name__ == "__main__":
-v1 = Vector([1, 2, 3, 4])
-v2 = Vector([2, 3, 4, 5])
-print(v1 + v2)
-print(v1 * v2)
+    v1 = Vector([1, 2, 3, 4])
+    v2 = Vector([2, 3, 4, 5])
+    print(v1 + v2)
+    print(v1 * v2)
 ```
