@@ -72,19 +72,19 @@ if __name__ == "__main__":
 ```Python
 # 创建一个实例化向量对象的类
 class Vector:
-def __init__(self, data):
-    self.data = data
+    def __init__(self, data):
+        self.data = data
 
-def __repr__(self):
-    return f"Vector({self.data})"
+    def __repr__(self):
+        return f"Vector({self.data})"
 
-# 实现两个向量的加法
-def __add__(self, other):
-    return Vector([x + y for x, y in zip(self.data, other.data)])
+    # 实现两个向量的加法
+    def __add__(self, other):
+        return Vector([x + y for x, y in zip(self.data, other.data)])
 
-# 实现两个向量的乘法
-def __mul__(self, other):
-    return sum([x * y for x, y in zip(self.data, other.data)])
+    # 实现两个向量的乘法
+    def __mul__(self, other):
+        return sum([x * y for x, y in zip(self.data, other.data)])
 
 if __name__ == "__main__":
     v1 = Vector([1, 2, 3, 4])
