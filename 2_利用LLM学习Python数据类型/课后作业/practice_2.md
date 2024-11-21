@@ -120,4 +120,4 @@ if __name__ == "__main__":
     print("Inorder Traversal after deleting 50:", bst.inorder_traversal())  # Output: [40, 60, 70, 80]
 ```
 - 程序运行截图如下
-  - ![BST构建验证截图](practice_2.png)
+![BST构建验证截图](practice_2.png)

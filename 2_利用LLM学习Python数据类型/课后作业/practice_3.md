@@ -66,4 +66,4 @@ if __name__ == "__main__":
     print("BFS starting from A:", graph.bfs("A"))  # Output: ['A', 'B', 'C']
 ```
 - 程序运行截图如下
-  - ![图的常用操作实现截图](practice_3.png)
+![图的常用操作实现截图](practice_3.png)
