@@ -108,7 +108,19 @@ print(filtered_numbers)
 - 柯里化（currying）：在`Python`中，`functools.partial`函数可以用于函数柯里化。柯里化是一种将接收多个参数转换为接收单一参数（返回接收余下参数的新函数）的技术，`partial`函数通过固定函数的部分参数并返回一个新的函数来实现这一点
 - 使用`partial`进行函数柯里化示例
 ```python
+# 假设我们有一个简单的函数 add，它接收两个参数并返回它们的和：
+def add(x, y):
+    return x + y
 
+# 我们可以使用 partial 函数将其柯里化：
+from functools import partial
+
+# 创建一个新的函数 add_one，它将 x 固定为 1
+add_one = partial(add, 1)
+
+# 调用 add_one 函数，只需要传递 y 参数
+result = add_one(2)  # 相当于调用 add(1, 2)
+print(result)  # 输出 3
 ```
 
 ## 2. 借助 LLM 掌握装饰器的概念
