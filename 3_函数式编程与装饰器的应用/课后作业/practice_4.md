@@ -28,3 +28,5 @@ greet("Bob")    # 正常调用
 greet("Charlie")  # 正常调用，达到阈值，打印消息并停止
 greet("Dave")    # 这行不会被执行
 ```
+- 程序运行截图
+![程序运行截图](practice_4.png)
