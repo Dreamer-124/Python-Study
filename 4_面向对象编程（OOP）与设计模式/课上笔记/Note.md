@@ -389,3 +389,219 @@ processor.process(data)  # 输出: Validation succeeded
 invalid_data = {123: "invalid"}
 processor.process(invalid_data)  # 输出: Validation failed
 ```
+
+
+## 3. 设计模式与代码复用的提升
+### 3.1 SOLID 原则的实践
+- 单一职责原则(SRP)：拆分大型类，使每个类只负责一项功能
+```python
+class Report:
+    def __init__(self, content):
+        self.content = content
+
+class FileManager:
+    @staticmethod
+    def save_to_file(report, filename):
+        with open(filename, 'w') as f:
+            f.write(report.content)
+
+class ReportPrinter:
+    @staticmethod
+    def print_report(report):
+        print(report.content)
+
+# Report 类只负责保存内容，其他职责由各自的类负责
+```
+- 开闭原则(OCP)：通过接口和抽象类，支持系统的扩展而无需修改已有代码
+```python
+from abc import ABC, abstractmethod
+
+class Shape(ABC):
+    @abstractmethod
+    def draw(self):
+        pass
+
+class Circle(Shape):
+    def draw(self):
+        print("Drawing a circle")
+
+class Rectangle(Shape):
+    def draw(self):
+        print("Drawing a rectangle")
+
+class GraphicEditor:
+    def draw_shape(self, shape: Shape):
+        shape.draw()
+
+# 新增形状时，只需实现 draw 方法，不改动 GraphicEditor
+```
+- 里氏替换原则(LSP)：确保子类能够替换父类而不改变系统行为
+```python
+class Shape(ABC):
+    @abstractmethod
+    def area(self):
+        pass
+
+class Rectangle(Shape):
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+
+    def area(self):
+        return self.width * self.height
+
+class Square(Shape):
+    def __init__(self, side):
+        self.side = side
+
+    def area(self):
+        return self.side * self.side
+
+# Rectangle 和 Square 彻底解耦，实现 LSP
+```
+- 接口隔离原则(ISP)：为不同的客户端提供专用接口，避免冗余
+```python
+class Workable(ABC):
+    @abstractmethod
+    def work(self):
+        pass
+
+class Eatable(ABC):
+    @abstractmethod
+    def eat(self):
+        pass
+
+class Worker(Workable, Eatable):
+    def work(self):
+        print("I'm working.")
+
+    def eat(self):
+        print("I'm eating.")
+
+class Robot(Workable):
+    def work(self):
+        print("I'm working.")
+```
+- 依赖倒置原则(DIP)：高层模块不依赖于低层模块，二者都依赖于抽象
+```python
+class Switchable(ABC):
+    @abstractmethod
+    def turn_on(self):
+        pass
+
+    @abstractmethod
+    def turn_off(self):
+        pass
+
+class LightBulb(Switchable):
+    def turn_on(self):
+        print("LightBulb: Bulb turned on")
+
+    def turn_off(self):
+        print("LightBulb: Bulb turned off")
+
+class Switch:
+    def __init__(self, device: Switchable):
+        self.device = device
+
+    def operate(self, on):
+        if on:
+            self.device.turn_on()
+        else:
+            self.device.turn_off()
+
+Switch(LightBulb()).operate(True)  # 使用起来只需要更换 LightBulb 类，更加方便
+```
+
+### 3.2 设计模式
+- 设计模式的三大基本分类：创建型模式、结构型模式、行为型模式
+- 创建型模式：工厂模式的深入应用
+ - 背景：在大型语言模型（LLM）系统中，不同的任务可能需要不同的模型组件，如预处理器、嵌入器等。为了提高系统的灵活性和可扩展性，我们可以使用工厂模式来动态创建这些组件
+ - 思路：
+  - 定义组件接口：定义所有组件的共同接口，例如，首先定义一个通用的组件接口`Component`，所有具体组件都将实现这个接口
+  ```python
+    from abc import ABC, abstractmethod
+
+    class Component(ABC):
+        @abstractmethod
+        def process(self, datd: str) -> str:
+            pass
+  ```
+  - 实现具体组件：实现不同的具体组件，如文本预处理器、词向量嵌入等，例如，实现几个具体的组件，如`TextPreprocessor`和`WordEmbedder`
+  ```python
+    class TextPreprocessor(Component):
+        def process(self, data: str) -> str:
+            # 简单的文本预处理逻辑
+            return data.lower().strip()
+
+
+    class WordEmbedder(Component):
+        def process(self, data: str) -> str:
+            # 简单的词嵌入逻辑
+            return f"Embedded({data})"
+  ``` 
+  - 创建组件工厂：实现一个工厂类，根据配置或参数动态创建组件实例
+  ```python
+    # 创建组件工厂
+    class ComponentFactory:
+        @staticmethod
+        def create_component(component_type: str) -> Component:
+            if component_type == "preprocessor":
+                return TextPreprocessor()
+            elif component_type == "embedder":
+                return WordEmbedder()
+            else:
+                raise ValueError(f"Unknown component type: {component_type}")
+  ```
+  - 遵循开闭原则：确保系统对扩展开放，对修改封闭
+```python
+# 定义组件接口
+from abc import ABC, abstractmethod
+
+class Component(ABC):
+    @abstractmethod
+    def process(self, datd: str) -> str:
+        pass
+
+# 实现具体组件
+class TextPreprocessor(Component):
+    def process(self, data: str) -> str:
+        # 简单的文本预处理逻辑
+        return data.lower().strip()
+
+class WordEmbedder(Component):
+    def process(self, data: str) -> str:
+        # 简单的词嵌入逻辑
+        return f"Embedded({data})"
+    
+# 创建组件工厂
+class ComponentFactory:
+    @staticmethod
+    def create_component(component_type: str) -> Component:
+        if component_type == "preprocessor":
+            return TextPreprocessor()
+        elif component_type == "embedder":
+            return WordEmbedder()
+        else:
+            raise ValueError(f"Unknown component type: {component_type}")
+        
+# 测试代码
+def main():
+    config = ["preprocessor", "embedder"]
+    data = "Hello, World!"
+    for component_type in config:
+        component = ComponentFactory.create_component(component_type)
+        processed_data = component.process(data)
+        print(f"{component_type.capitalize()} output: {processed_data}")
+
+if __name__ == "__main__":
+    main()
+```
+
+- 结构型模式：装饰器模式与描述符的结合，探讨装饰器模式和描述符在增强类功能、避免重复代码方面的作用。为类或函数添加缓存、日志记录、输入验证等功能，提高代码的可复用性
+ - 思路：
+  - 装饰器模式：使用类装饰器为检索组件添加缓存机制，提高性能，首先定义一个类装饰器`CacheDecorator`，为检索组件添加缓存机制
+  - 描述符：利用描述符实现属性的类型检查和访问控制，防止错误使用
+  - 单一职责原则：每个类或函数只负责一项功能
+
+
