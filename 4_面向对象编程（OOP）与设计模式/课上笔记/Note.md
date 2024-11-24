@@ -601,7 +601,188 @@ if __name__ == "__main__":
 - 结构型模式：装饰器模式与描述符的结合，探讨装饰器模式和描述符在增强类功能、避免重复代码方面的作用。为类或函数添加缓存、日志记录、输入验证等功能，提高代码的可复用性
  - 思路：
   - 装饰器模式：使用类装饰器为检索组件添加缓存机制，提高性能，首先定义一个类装饰器`CacheDecorator`，为检索组件添加缓存机制
-  - 描述符：利用描述符实现属性的类型检查和访问控制，防止错误使用
+  ```python
+    import functools
+    import time
+
+    class CacheDecorator:
+        def __init__(self, cls) -> None:
+            self.cls = cls
+            self.cache = {}
+
+        def __call__(self, *args, **kwargs):
+            key = (args, tuple(kwargs.items()))
+            if key not in self.cache:
+                self.cache[key] = self.cls(*args, **kwargs)
+            return self.cache[key]
+        
+    @CacheDecorator
+    class RetrievalComponent:
+        def retrieve(self, query: str) -> str:
+            # 模拟检索操作
+            return f"Result for {query}"
+        
+    # 测试代码
+    retrival_component = RetrievalComponent()
+
+    Start_time = time.time()
+    print(retrival_component.retrieve("query1"))
+    print(f"First time: {time.time() - Start_time}")
+
+    Start_time = time.time()
+    print(retrival_component.retrieve("query1"))
+    print(f"Second time: {time.time() - Start_time}")    
+  ```
+  - 描述符：利用描述符实现属性的类型检查和访问控制，防止错误使用，定义一个描述符`TypeCheckedAttribute`，用于实现属性的类型检查和访问控制
+  ```python
+    from typing import Any
+
+
+    class TypeCheckedAttribute:
+        def __init__(self, name, expected_type):
+            self.name = name
+            self.expected_type = expected_type
+        
+        def __get__(self, instance, owner):
+            return instance.__dict__.get(self.name)
+        
+        def __set__(self, instance, value):
+            if not isinstance(value, self.expected_type):
+                raise TypeError(f"Expected {self.expected_type} for {self.name}, got {type(value)}")
+            instance.__dict__[self.name] = value
+        
+        def __delete__(self, instance):
+            raise AttributeError(f"Can not delete attribute {self.name}")
+        
+
+    class DataComponent:
+        data = TypeCheckedAttribute("data", str)
+
+        def __init__(self, data):
+            self.data = data
+
+
+    # 测试代码
+    data_component = DataComponent("valid data")
+    print(data_component.data)  # 输出: valid data
+
+    try:
+        data_component.data = 123
+    except TypeError as e:
+        print(e)  # 输出: Expected <class 'str'> for data, got <class 'int'>
+  ```
   - 单一职责原则：每个类或函数只负责一项功能
+- 大模型相关实践：在复杂系统中，进行统一的异常处理和日志记录非常关键，使用函数装饰器可以在保持核心业务逻辑清晰的同时，添加一直的异常处理和日志记录机制
+
+### 3.3 行为型模型：策略模式与观察者模式
+- 理解策略模式和观察者模式在动态调整系统行为和时间通知中的应用
+- 应用场景
+ - 策略模式：在`RAG`系统中，根据业务需求动态选择检索或生成策略
+ - 观察者模式：使用观察者模式监控系统状态，及时响应变化
+- 实现策略模式
+ - 定义一个策略接口`Strategy`，所有具体策略都将实现这个接口
+ ```python
+    from abc import ABC, abstractmethod
+
+    class Strategy(ABC):
+        @abstractmethod
+        def execute(self, data: str) -> str:
+            pass
+ ```
+ - 实现几个具体的策略，如`KeywordSearchStrategy`和`SemanticSearchStrategy`
+ ```python
+    class KeywordSearchStrategy(Strategy):
+        def execute(self, data: str) -> str:
+            return f"Keyword search result for {data}"
+        
+    class SemanticSearchStrategy(Strategy):
+        def execute(self, data: str) -> str:
+            return f"Semantic search result for {data}"
+ ```
+ - 实现策略管理器`StrategyManager`，支持在运行时切换不同的策略
+ ```python
+    class StrategyManager:
+        def __init__(self, Strategy: Strategy):
+            self._strategy = Strategy
+            
+        def set_strategy(self, Strategy: Strategy):
+            self._strategy = Strategy
+        
+        def execute_strategy(self, data: str) -> str:
+            return self._strategy.execute(data)
+
+    # 测试代码
+    def test_strategy():
+        strategy_manager = StrategyManager(KeywordSearchStrategy())
+        print(strategy_manager.execute_strategy("Python"))  # 输出：Keyword search result for Python
+        
+        strategy_manager.set_strategy(SemanticSearchStrategy())
+        print(strategy_manager.execute_strategy("Python"))  # 输出：Semantic search result for Python
+
+    test_strategy()
+ ```
+- 大模型相关实践：在检索增强生成（RAG）系统中，用户需求可能多种多样，有些用户可能希望快速得到结果，有些用户则希望得到更精确的答案，通过策略模式，我们可以在检索策略和生成策略上根据不同的需求进行动态选择，策略模式能够使得这些选择封装在不同的策略类中，符合里氏替换原则，也就是说，系统可以用任何以后一种符合标准的策略类来替换而不影响系统的正常运行
+- 实现观察者模式
+```python
+from abc import ABC, abstractmethod
+from typing import List
+
+# 观察者模式
+class Observer(ABC):
+    @abstractmethod
+    def update(self, data: str) -> None:
+        pass
+
+
+class Observable(ABC):
+    def __init__(self):
+        self._obsvers: List[Observer] = []
+
+    def add_observer(self, observer: Observer) -> None:
+        self._obsvers.append(observer)
+
+    def remove_observer(self, observer: Observer) -> None:
+        self._obsvers.remove(observer)
+    
+    def notify_observers(self, data: str) -> None:
+        for observer in self._obsvers:
+            observer.update(data)
+
+
+class DataSource(Observable):
+    def __init__(self):
+        super().__init__()
+        self._data = ""
+
+    @property
+    def data(self) -> str:
+        return self._data
+    
+    @data.setter
+    def data(self, value: str) -> None:
+        self._data = value
+        self.notify_observers(value)
+
+
+class DataObserver(Observer):
+    def update(self, data: str) -> None:
+        print(f"DataObserver received data update: {data}")
+
+
+# 测试代码
+def main():
+    # 测试观察者模式
+    data_source = DataSource()
+    observer = DataObserver()
+
+    data_source.add_observer(observer)
+    data_source.data = "new data"  # 输出：DataObserver received data update: new data
+
+
+if __name__ == "__main__":
+    main()
+```
+- 大模型相关实践：在`RAG`系统中，数据源（如文档或知识库）可能会经常更新。为了确保系统使用最新的数据，我们可以通过观察者模式建立数据源与组件之间的观察者关系。当数据源发生更新时，通过观察者模式通知所有订阅的组件重新加载数据。这种设计还符合依赖倒置原则，因为观察者并不直接依赖数据源，而是依赖一个抽象的“主题”接口
+
 
 
