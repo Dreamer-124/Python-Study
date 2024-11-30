@@ -53,7 +53,8 @@ try:
     cleaned_doc = doc.clean()
     print(cleaned_doc)
 except ValueError as e:
-    print(e)```
+    print(e)
+```
 
 - 程序运行截图
 ![程序运行截图](practice_3.png)

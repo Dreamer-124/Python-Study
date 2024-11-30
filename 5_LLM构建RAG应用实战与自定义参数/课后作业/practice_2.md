@@ -25,7 +25,8 @@ def static_dir(dir_path):
 # 测试代码
 if __name__ == "__main__":
     dir_path = "D:/Desktop/www/Python-Study/4_面向对象编程（OOP）与设计模式/课程代码"
-    print(static_dir(dir_path))```
+    print(static_dir(dir_path))
+```
 
 - 程序运行截图
 ![程序运行截图](practice_2.png)

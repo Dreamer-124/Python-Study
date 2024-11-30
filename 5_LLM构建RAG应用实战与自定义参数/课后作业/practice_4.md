@@ -28,7 +28,8 @@ if __name__ == '__main__':
     log.log_info()
     log.log_error()
     log.log_warning()
-    os.system('cat test.log')```
+    os.system('cat test.log')
+```
 
 - 程序运行截图
 ![程序运行截图](practice_4.png)
